@@ -45,11 +45,11 @@ var tasks = map[string]Task{
 func main() {
 	r := chi.NewRouter()
 
-	// здесь регистрируйте ваши обработчики
-	// ...
+	// здесь регистрируйте ваши обработчики куку
+	
 
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		fmt.Printf("Ошибка при запуске сервера: %s", err.Error())
-		return
+		return 0
 	}
 }
