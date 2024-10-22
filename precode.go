@@ -9,7 +9,6 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-// Task ...
 type Task struct {
 	ID           string   `json:"id"`
 	Description  string   `json:"description"`
@@ -61,12 +60,7 @@ func getTasks(w http.ResponseWriter, r *http.Request) {
 func getTask(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	task, ok := tasks[id]
-	if !ok {
-		//http.Error(w, "Артист не найден", http.StatusNoContent)
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+	task, _ := tasks[id]
 
 	resp, err := json.Marshal(task)
 	if err != nil {
