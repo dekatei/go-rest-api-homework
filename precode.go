@@ -60,7 +60,11 @@ func getTasks(w http.ResponseWriter, r *http.Request) {
 func getTask(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	task, _ := tasks[id]
+	task, ok := tasks[id]
+	if !ok {
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
 
 	resp, err := json.Marshal(task)
 	if err != nil {
@@ -102,8 +106,7 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 
 	task, ok := tasks[id]
 	if !ok {
-		//http.Error(w, "Артист не найден", http.StatusNoContent)
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
 
