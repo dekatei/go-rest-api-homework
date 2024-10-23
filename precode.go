@@ -95,9 +95,12 @@ func postTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// проверяем есть ли значение в мапе
-	if _, ok := tasks[task.ID]; !ok {
-		tasks[task.ID] = task
+	if _, ok := tasks[task.ID]; ok {
+		http.Error(w, "", http.StatusBadRequest)
+		return
 	}
+
+	tasks[task.ID] = task
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
