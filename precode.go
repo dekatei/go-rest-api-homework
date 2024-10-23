@@ -76,8 +76,8 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	// так как все успешно, то статус OK
 	w.WriteHeader(http.StatusOK)
-	// записываем сериализованные в JSON данные в тело ответа
-	w.Write(resp)
+	// игнорируем ошибку
+	_, _ = w.Write(resp)
 }
 
 func postTask(w http.ResponseWriter, r *http.Request) {
@@ -94,8 +94,10 @@ func postTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	tasks[task.ID] = task
+	// проверяем есть ли значение в мапе
+	if _, ok := tasks[task.ID]; !ok {
+		tasks[task.ID] = task
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
@@ -110,18 +112,12 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := json.Marshal(task)
-	if err != nil {
-		delete(tasks, task.ID)
-		return
-	}
+	delete(tasks, task.ID)
 
 	// в заголовок записываем тип контента, у нас это данные в формате JSON
 	w.Header().Set("Content-Type", "application/json")
 	// так как все успешно, то статус OK
 	w.WriteHeader(http.StatusOK)
-	// записываем сериализованные в JSON данные в тело ответа
-	w.Write(resp)
 }
 
 // ____________________________________________________________________________
