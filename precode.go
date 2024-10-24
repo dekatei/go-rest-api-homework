@@ -53,8 +53,8 @@ func getTasks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	// так как все успешно, то статус OK
 	w.WriteHeader(http.StatusOK)
-	// записываем сериализованные в JSON данные в тело ответа
-	w.Write(resp)
+	// явно пропускаем ошибку
+	_, _ = w.Write(resp)
 }
 
 func getTask(w http.ResponseWriter, r *http.Request) {
@@ -135,7 +135,7 @@ func main() {
 	// регистрируем в роутере эндпоинт `/artist/{id}` с методом GET, для которого используется обработчик `getTask`
 	r.Get("/task/{id}", getTask)
 	// регистрируем в роутере эндпоинт `/artist/{id}` с методом DELETE, для которого используется обработчик `deleteTask`
-	r.Delete("/task/{id}", getTask)
+	r.Delete("/task/{id}", deleteTask)
 
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		fmt.Printf("Ошибка при запуске сервера: %s", err.Error())
